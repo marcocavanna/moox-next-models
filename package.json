@@ -1,0 +1,13 @@
+{
+  "name": "@appbuckets/moox-next-models",
+  "version": "1.0.0",
+  "description": "Models and Typings for Moox Next Project",
+  "main": "index.js",
+  "repository": "git@github.com:marcocavanna/moox-next-models.git",
+  "author": "Marco Cavanna <marco@appbuckets.io>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/mongoose": "^5.10.1"
+  }
+}
