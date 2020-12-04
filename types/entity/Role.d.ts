@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { APIResponse, PopulableField } from '../generic';
+import { JsonObject, PopulableField } from '../generic';
 import { TeamEntity } from './Team';
 
 
@@ -14,7 +14,8 @@ export namespace RoleEntity {
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model extends Statics, mongoose.Model<Document> {
+  export interface Model<PopulatedPath extends PopulableFields = never>
+    extends Statics, mongoose.Model<Document<PopulatedPath>> {
   }
 
 
@@ -25,6 +26,9 @@ export namespace RoleEntity {
    */
   export interface Document<PopulatedPath extends PopulableFields = never>
     extends Schema<PopulatedPath>, Methods, Virtuals, mongoose.Document {
+    _id: mongoose.Types.ObjectId;
+
+    id: string;
   }
 
 
@@ -33,7 +37,7 @@ export namespace RoleEntity {
    * be passed to client using API Endpoint response
    */
   export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends APIResponse<Schema<PopulatedPath> & Virtuals> {
+    extends JsonObject<Schema<PopulatedPath> & Virtuals> {
     _id: string;
 
     id: string;

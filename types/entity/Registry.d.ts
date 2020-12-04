@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { APIResponse, PopulableField } from '../generic';
+import { JsonObject, PopulableField } from '../generic';
 import { TeamEntity } from './Team';
 
 
@@ -50,7 +50,11 @@ export namespace RegistryEntity {
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model extends Statics, mongoose.Model<Document> {
+  export interface Model<PopulatedPath extends PopulableFields = never>
+    extends Statics, mongoose.Model<Document<PopulatedPath>> {
+    _id: mongoose.Types.ObjectId;
+
+    id: string;
   }
 
 
@@ -69,7 +73,7 @@ export namespace RegistryEntity {
    * be passed to client using API Endpoint response
    */
   export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends APIResponse<Schema<PopulatedPath> & Virtuals> {
+    extends JsonObject<Schema<PopulatedPath> & Virtuals> {
     _id: string;
 
     id: string;

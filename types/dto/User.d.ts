@@ -11,9 +11,11 @@ export namespace Dto {
 
       password: string;
 
-      role?: number;
+      roleId?: string;
 
-      team: string;
+      teamName?: string;
+
+      teamId?: string;
 
       surname?: string;
     }

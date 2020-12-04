@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { APIResponse, PopulableVirtualCollection } from '../generic';
+import { JsonObject, PopulableCollection } from '../generic';
 import { RoleEntity } from './Role';
 
 
@@ -9,12 +9,14 @@ export namespace TeamEntity {
   /** Set of populable model path */
   export type PopulableFields = 'roles';
 
+
   /**
    * The Model is used to create a new Entity
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model extends Statics, mongoose.Model<Document> {
+  export interface Model<PopulatedPath extends PopulableFields = never>
+    extends Statics, mongoose.Model<Document<PopulatedPath>> {
   }
 
 
@@ -25,6 +27,9 @@ export namespace TeamEntity {
    */
   export interface Document<PopulatedPath extends PopulableFields = never>
     extends Schema<PopulatedPath>, Methods, Virtuals<PopulatedPath>, mongoose.Document {
+    _id: mongoose.Types.ObjectId;
+
+    id: string;
   }
 
 
@@ -33,7 +38,7 @@ export namespace TeamEntity {
    * be passed to client using API Endpoint response
    */
   export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends APIResponse<Schema<PopulatedPath> & Virtuals<PopulatedPath>> {
+    extends JsonObject<Schema<PopulatedPath> & Virtuals<PopulatedPath>> {
     _id: string;
 
     id: string;
@@ -46,8 +51,14 @@ export namespace TeamEntity {
    * this fields will be saved on database
    */
   export interface Schema<PopulatedPath extends PopulableFields = never> {
+    /** The default role, used on User Creation */
+    defaultRole: mongoose.Types.ObjectId;
+
     /** The Team Name */
     name: string;
+
+    /** All roles related to Teams */
+    roles: PopulableCollection<RoleEntity.Document, 'roles', PopulatedPath>
 
     /** The team slug */
     slug?: string;
@@ -71,8 +82,6 @@ export namespace TeamEntity {
    * Describe all virtuals field
    */
   export interface Virtuals<PopulatedPath extends PopulableFields = never> {
-    /** All roles related to Teams */
-    roles: PopulableVirtualCollection<RoleEntity.Document, 'roles', PopulatedPath>
   }
 
 

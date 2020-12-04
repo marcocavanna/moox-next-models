@@ -7,20 +7,20 @@ import * as mongoose from 'mongoose';
 export type AnyObject = { [key: string]: any };
 
 /**
- * @type APIResponse
+ * @type JsonObject
  *
  * @description
  * Used to define object passed through
  * an API call. The result of this operation
  * is a Plain object, without function field
  */
-export type APIResponse<T> = {
+export type JsonObject<T> = {
   [K in keyof T]: T[K] extends (() => (void | any | Promise<any> | Promise<void> | mongoose.Document))
     ? never
     : T[K] extends mongoose.Types.ObjectId
       ? string
       : T[K] extends (object | mongoose.Document)
-        ? APIResponse<T[K]>
+        ? JsonObject<T[K]>
         : T[K]
 };
 

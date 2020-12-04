@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { APIResponse, PopulableCollection, PopulableField } from '../generic';
+import { JsonObject, PopulableField, PopulableVirtualField } from '../generic';
 import { RoleEntity } from './Role';
 import { TeamEntity } from './Team';
 
@@ -8,14 +8,15 @@ import { TeamEntity } from './Team';
 export namespace UserEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'teams.role' | 'teams.team' | 'currentTeam';
+  export type PopulableFields = 'teams.role' | 'teams.team';
 
   /**
    * The Model is used to create a new Entity
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model extends Statics, mongoose.Model<Document> {
+  export interface Model<PopulatedPath extends PopulableFields = void>
+    extends Statics, mongoose.Model<Document<PopulatedPath>> {
   }
 
 
@@ -24,8 +25,11 @@ export namespace UserEntity {
    * this document will have virtuals and methods defined
    * into entity schema
    */
-  export interface Document<PopulatedPath extends PopulableFields = never>
-    extends Schema<PopulatedPath>, Methods, Virtuals, mongoose.Document {
+  export interface Document<PopulatedPath extends PopulableFields = void>
+    extends Schema<PopulatedPath>, Methods, Virtuals<PopulatedPath>, mongoose.Document {
+    _id: mongoose.Types.ObjectId;
+
+    id: string;
   }
 
 
@@ -33,8 +37,8 @@ export namespace UserEntity {
    * The json interface type define the documents that will
    * be passed to client using API Endpoint response
    */
-  export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends APIResponse<Omit<Schema<PopulatedPath>, 'password'> & Virtuals> {
+  export interface JSON<PopulatedPath extends PopulableFields = void>
+    extends JsonObject<Schema<PopulatedPath> & Virtuals<PopulatedPath>> {
     _id: string;
 
     id: string;
@@ -46,42 +50,36 @@ export namespace UserEntity {
    * that will be controlled by user and by API
    * this fields will be saved on database
    */
-  export interface Schema<PopulatedPath extends PopulableFields = never> {
+  export interface Schema<PopulatedPath extends PopulableFields = void> {
     /** The user current team */
-    currentTeam: PopulableField<TeamEntity.Document, 'currentTeam', PopulatedPath>
+    currentTeamId: mongoose.Types.ObjectId;
 
     /** The user Email */
     email: string;
 
     /** Verified Email Checker */
-    emailVerified: boolean;
+    emailVerified?: boolean;
 
-    /** Set/Check if the user is a Commercial Manager */
-    isCommercialManager: boolean;
-
-    /** Set/Check if the user is a Project Manager */
-    isProjectManager: boolean;
-
-    /** Set/Check if the user is a System Administrator */
-    isSystemAdministrator: boolean;
+    /** The identity Id */
+    identityId: string;
 
     /** The user Name */
     name: string;
 
     /** Photo URL Location */
-    photoURL: string;
+    photoURL?: string;
 
     /** User settings and Preferences */
-    preferences: Preferences.Schema;
+    preferences?: Preferences.Schema;
 
     /** User Team */
     teams: {
-      role: PopulableCollection<RoleEntity.Document, 'teams.role', PopulatedPath>,
-      team: PopulableCollection<TeamEntity.Document, 'teams.team', PopulatedPath>
+      role: PopulableField<RoleEntity.Document, 'teams.role', PopulatedPath>,
+      team: PopulableField<TeamEntity.Document, 'teams.team', PopulatedPath>
     }[];
 
     /** The User Surname */
-    surname: string;
+    surname?: string;
   }
 
 
@@ -96,9 +94,15 @@ export namespace UserEntity {
   /**
    * Describe all virtuals field
    */
-  export interface Virtuals {
+  export interface Virtuals<PopulatedPath extends PopulableFields = void> {
     /** User Complete Name */
     completeName: string;
+
+    /** The current user role in team */
+    currentRole: PopulableVirtualField<RoleEntity.Document, 'teams.role', PopulatedPath>
+
+    /** The user current team */
+    currentTeam: PopulableVirtualField<TeamEntity.Document, 'teams.team', PopulatedPath>
 
     /** User Initials */
     initials: string;
