@@ -60,11 +60,14 @@ export namespace UserEntity {
     /** Verified Email Checker */
     emailVerified?: boolean;
 
+    /** The user Name */
+    firstName: string;
+
     /** The identity Id */
     identityId: string;
 
-    /** The user Name */
-    name: string;
+    /** The User Surname */
+    lastName?: string;
 
     /** Photo URL Location */
     photoURL?: string;
@@ -77,9 +80,6 @@ export namespace UserEntity {
       role: PopulableField<RoleEntity.Document, 'teams.role', PopulatedPath>,
       team: PopulableField<TeamEntity.Document, 'teams.team', PopulatedPath>
     }[];
-
-    /** The User Surname */
-    surname?: string;
   }
 
 

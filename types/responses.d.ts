@@ -13,10 +13,17 @@ export namespace APIResponse {
 
       refreshToken: RefreshToken,
 
-      accessToken: {
-        expiresIn: number,
-        token: AccessToken
-      }
+      accessToken: AccessGrant
+    }
+
+    export interface AccessGrant {
+      token: AccessToken;
+
+      email: string;
+
+      expiresAt: number;
+
+      roles: string[];
     }
 
 

@@ -3,11 +3,7 @@ export namespace Dto {
     export interface Create {
       email: string;
 
-      isCommercialManager?: boolean;
-
-      isProjectManager?: boolean;
-
-      name: string;
+      firstName: string;
 
       password: string;
 
@@ -17,7 +13,7 @@ export namespace Dto {
 
       teamId?: string;
 
-      surname?: string;
+      lastName?: string;
     }
 
     export interface Login {
