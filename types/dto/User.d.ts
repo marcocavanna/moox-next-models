@@ -7,13 +7,15 @@ export namespace Dto {
 
       password: string;
 
+      passwordConfirm: string;
+
       roleId?: string;
 
       teamName?: string;
 
       teamId?: string;
 
-      lastName?: string;
+      lastName?: string | null;
     }
 
     export interface Login {
