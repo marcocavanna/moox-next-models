@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableField } from '../generic';
+import { JsonObject, PopulableField, PopulableVirtualCollection } from '../generic';
 import { TeamEntity } from './Team';
 
 
 export namespace RegistryEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'team';
+  export type PopulableFields = 'team' | 'related';
 
   /**
    * The Reference interface will be used to
@@ -15,10 +15,13 @@ export namespace RegistryEntity {
    */
   export interface Reference {
     /** The reference id */
-    _id: string;
+    _id: mongoose.Types.ObjectId;
+
+    /** Reference is favorite */
+    isFavorite: boolean;
 
     /** Reference Label */
-    label?: string;
+    label: string;
 
     /** The reference value */
     value: string;
@@ -29,7 +32,7 @@ export namespace RegistryEntity {
    * define each single registry address
    */
   export interface Address {
-    _id: string;
+    _id: mongoose.Types.ObjectId;
 
     city?: string;
 
@@ -37,9 +40,15 @@ export namespace RegistryEntity {
 
     emails: Reference[];
 
-    isRegisteredOffice?: boolean;
+    isFavorite: boolean;
 
-    isShipmentOffice?: boolean;
+    isHeadQuarter: boolean;
+
+    isRegisteredOffice: boolean;
+
+    isShipmentOffice: boolean;
+
+    label: string;
 
     phones: Reference[];
 
@@ -51,6 +60,11 @@ export namespace RegistryEntity {
 
     zipCode?: string;
   }
+
+  /**
+   * Registry could have several Type
+   */
+  export type Type = 'individual' | 'company';
 
   /**
    * The Model is used to create a new Entity
@@ -71,7 +85,7 @@ export namespace RegistryEntity {
    * into entity schema
    */
   export interface Document<PopulatedPath extends PopulableFields = never>
-    extends Schema<PopulatedPath>, Methods, Virtuals, mongoose.Document {
+    extends Schema<PopulatedPath>, Methods, Virtuals<PopulatedPath>, mongoose.Document {
   }
 
 
@@ -80,7 +94,7 @@ export namespace RegistryEntity {
    * be passed to client using API Endpoint response
    */
   export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends JsonObject<Schema<PopulatedPath> & Virtuals> {
+    extends JsonObject<Schema<PopulatedPath> & Virtuals<PopulatedPath>> {
     _id: string;
 
     id: string;
@@ -93,17 +107,20 @@ export namespace RegistryEntity {
    * this fields will be saved on database
    */
   export interface Schema<PopulatedPath extends PopulableFields = never> {
+    /** Address List */
+    addresses: Address[];
+
+    /** The company name */
+    companyName?: string;
+
+    /** Emails List */
+    emails: Reference[];
+
+    /** Non registry company firstName */
+    firstName?: string;
+
     /** The registry fiscalCode */
     fiscalCode?: string;
-
-    /** Registry head office */
-    headOffice?: Address;
-
-    /** Get or Set if Registry is an Active Customer */
-    isActiveCustomer: boolean;
-
-    /** Get or Set if Registry is an Active Supplier */
-    isActiveSupplier: boolean;
 
     /** Get or Set if Registry is a Customer */
     isCustomer: boolean;
@@ -111,17 +128,26 @@ export namespace RegistryEntity {
     /** Get or Set if Registry is a Supplier */
     isSupplier: boolean;
 
-    /** The Registry Name */
-    name: string;
+    /** Non registry company lastName */
+    lastName?: string;
 
-    /** The Registry SubName */
-    subName?: string;
+    /** The Parent Registry */
+    parent?: PopulableField<Document, 'parent', PopulatedPath>
+
+    /** Phones List */
+    phones: Reference[];
 
     /** Related Team */
     team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>
 
+    /** Registry Type */
+    type: Type;
+
     /** The Registry VAT Number */
     vatNumber?: string;
+
+    /** Webs and Social References */
+    webs: Reference[];
   }
 
 
@@ -136,7 +162,9 @@ export namespace RegistryEntity {
   /**
    * Describe all virtuals field
    */
-  export interface Virtuals {
+  export interface Virtuals<PopulatedPath extends PopulableFields = never> {
+    /** Related Contacts */
+    related?: PopulableVirtualCollection<Document, 'related', PopulatedPath>
   }
 
 
