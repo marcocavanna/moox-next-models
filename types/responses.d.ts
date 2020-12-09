@@ -1,4 +1,4 @@
-import { UserEntity } from './entity';
+import { UserEntity, RegistryEntity } from './entity';
 
 
 export namespace APIResponse {
@@ -35,6 +35,14 @@ export namespace APIResponse {
 
     /** User Data */
     export type User = UserEntity.JSON<'teams.role' | 'teams.team'>;
+  }
+
+  export namespace Registries {
+
+    export type Single = RegistryEntity.JSON;
+
+    export type List = Single[];
+
   }
 
 }

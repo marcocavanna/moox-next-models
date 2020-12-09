@@ -14,7 +14,14 @@ export namespace RegistryEntity {
    * define each phone/mail/web registry reference
    */
   export interface Reference {
+    /** The reference id */
+    _id: string;
 
+    /** Reference Label */
+    label?: string;
+
+    /** The reference value */
+    value: string;
   }
 
   /**
