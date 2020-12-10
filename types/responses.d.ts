@@ -1,8 +1,15 @@
-import { UserEntity, RegistryEntity } from './entity';
+import {
+  UserEntity,
+  RegistryEntity,
+  RegistryTypeEntity
+} from './entity';
 
 
 export namespace APIResponse {
 
+  /* --------
+   * Auth Specific Responses
+   * -------- */
   export namespace Auth {
 
     // ----
@@ -37,11 +44,27 @@ export namespace APIResponse {
     export type User = UserEntity.JSON<'teams.role' | 'teams.team'>;
   }
 
+
+  /* --------
+   * Registries Responses
+   * -------- */
   export namespace Registries {
 
-    export type Single = RegistryEntity.JSON;
+    export type Single<PopulatedPath = never> = RegistryEntity.JSON<PopulatedPath>;
 
-    export type List = Single[];
+    export type List<PopulatedPath = never> = Single<PopulatedPath>[];
+
+  }
+
+
+  /* --------
+   * Registry Types Responses
+   * -------- */
+  export namespace RegistryTypes {
+
+    export type Single<PopulatedPath = never> = RegistryTypeEntity.JSON<PopulatedPath>;
+
+    export type List<PopulatedPath = never> = Single<PopulatedPath>[];
 
   }
 

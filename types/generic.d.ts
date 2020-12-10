@@ -19,9 +19,11 @@ export type JsonObject<T> = {
     ? never
     : T[K] extends mongoose.Types.ObjectId
       ? string
-      : T[K] extends (object | mongoose.Document)
-        ? JsonObject<T[K]>
-        : T[K]
+      : T[K] extends mongoose.Types.DocumentArray<infer P>
+        ? JsonObject<P>
+        : T[K] extends (object | mongoose.Document)
+          ? JsonObject<T[K]>
+          : T[K]
 };
 
 

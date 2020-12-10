@@ -1,27 +1,26 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableField, PopulableVirtualCollection } from '../generic';
+import { JsonObject, PopulableField } from '../generic';
+
+import { RegistryTypeEntity } from './RegistryType';
 import { TeamEntity } from './Team';
 
 
 export namespace RegistryEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'team' | 'related';
+  export type PopulableFields = 'team' | 'registry-type';
 
   /**
    * The Reference interface will be used to
    * define each phone/mail/web registry reference
    */
   export interface Reference {
-    /** The reference id */
-    _id: mongoose.Types.ObjectId;
-
     /** Reference is favorite */
     isFavorite: boolean;
 
     /** Reference Label */
-    label: string;
+    label?: string;
 
     /** The reference value */
     value: string;
@@ -32,8 +31,6 @@ export namespace RegistryEntity {
    * define each single registry address
    */
   export interface Address {
-    _id: mongoose.Types.ObjectId;
-
     city?: string;
 
     country?: string;
@@ -61,10 +58,8 @@ export namespace RegistryEntity {
     zipCode?: string;
   }
 
-  /**
-   * Registry could have several Type
-   */
-  export type Type = 'individual' | 'company';
+  export type Typology = 'individual' | 'company';
+
 
   /**
    * The Model is used to create a new Entity
@@ -108,46 +103,46 @@ export namespace RegistryEntity {
    */
   export interface Schema<PopulatedPath extends PopulableFields = never> {
     /** Address List */
-    addresses: Address[];
+    addresses: mongoose.Types.DocumentArray<Address>;
+
+    /** The company Claim */
+    companyPayoff?: string | null;
 
     /** The company name */
-    companyName?: string;
+    companyName?: string | null;
 
     /** Emails List */
-    emails: Reference[];
+    emails: mongoose.Types.DocumentArray<Reference>;
 
     /** Non registry company firstName */
-    firstName?: string;
+    firstName?: string | null;
 
     /** The registry fiscalCode */
-    fiscalCode?: string;
-
-    /** Get or Set if Registry is a Customer */
-    isCustomer: boolean;
-
-    /** Get or Set if Registry is a Supplier */
-    isSupplier: boolean;
+    fiscalCode?: string | null;
 
     /** Non registry company lastName */
-    lastName?: string;
+    lastName?: string | null;
 
     /** The Parent Registry */
-    parent?: PopulableField<Document, 'parent', PopulatedPath>
+    parent?: PopulableField<Document, 'parent', PopulatedPath> | null
 
     /** Phones List */
-    phones: Reference[];
+    phones: mongoose.Types.DocumentArray<Reference>;
 
     /** Related Team */
     team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>
 
     /** Registry Type */
-    type: Type;
+    type: PopulableField<RegistryTypeEntity.Document, 'type', PopulatedPath> | null;
+
+    /** Registry Typology */
+    typology: Typology;
 
     /** The Registry VAT Number */
-    vatNumber?: string;
+    vatNumber?: string | null;
 
     /** Webs and Social References */
-    webs: Reference[];
+    webs: mongoose.Types.DocumentArray<Reference>;
   }
 
 
@@ -163,8 +158,29 @@ export namespace RegistryEntity {
    * Describe all virtuals field
    */
   export interface Virtuals<PopulatedPath extends PopulableFields = never> {
-    /** Related Contacts */
-    related?: PopulableVirtualCollection<Document, 'related', PopulatedPath>
+    /** Registry display name */
+    displayName: string;
+
+    /** Registry display sub name */
+    displaySubName: string | null;
+
+    /** Registry Initials */
+    initials: string;
+
+    /** Check if registry is Company */
+    isCompany: boolean;
+
+    /** Primary Fiscal */
+    primaryFiscal: string | null;
+
+    /** The primary email */
+    primaryEmail: Reference | null;
+
+    /** The primary phone */
+    primaryPhone: Reference | null;
+
+    /** Secondary Fiscal */
+    secondaryFiscal: string | null;
   }
 
 
