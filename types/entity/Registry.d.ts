@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableField } from '../generic';
+import { JsonObject, PopulableField, PopulableVirtualCollection } from '../generic';
 
 import { RegistryTypeEntity } from './RegistryType';
 import { TeamEntity } from './Team';
@@ -9,7 +9,7 @@ import { TeamEntity } from './Team';
 export namespace RegistryEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'parent' | 'team' | 'type';
+  export type PopulableFields = 'children' | 'parent' | 'team' | 'type' | 'related';
 
   /**
    * The Reference interface will be used to
@@ -164,6 +164,9 @@ export namespace RegistryEntity {
     /** Registry display sub name */
     displaySubName: string | null;
 
+    /** Children Registries */
+    children: PopulableVirtualCollection<RegistryEntity.Document, 'children', PopulatedPath>
+
     /** Registry Initials */
     initials: string;
 
@@ -178,6 +181,9 @@ export namespace RegistryEntity {
 
     /** The primary phone */
     primaryPhone: Reference | null;
+
+    /** Related Registries */
+    related: PopulableVirtualCollection<RegistryEntity.Document, 'related', PopulatedPath>
 
     /** Secondary Fiscal */
     secondaryFiscal: string | null;

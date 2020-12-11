@@ -50,9 +50,10 @@ export namespace APIResponse {
    * -------- */
   export namespace Registries {
 
-    export type Single<PopulatedPath = never> = RegistryEntity.JSON<PopulatedPath>;
+    export type Single<PopulatedPath extends RegistryEntity.PopulableFields = never> =
+      RegistryEntity.JSON<PopulatedPath>;
 
-    export type List<PopulatedPath = never> = Single<PopulatedPath>[];
+    export type List<PopulatedPath extends RegistryEntity.PopulableFields = never> = Single<PopulatedPath>[];
 
   }
 
@@ -62,9 +63,9 @@ export namespace APIResponse {
    * -------- */
   export namespace RegistryTypes {
 
-    export type Single<PopulatedPath = never> = RegistryTypeEntity.JSON<PopulatedPath>;
+    export type Single<PopulatedPath extends RegistryTypeEntity.PopulableFields = never> = RegistryTypeEntity.JSON<PopulatedPath>;
 
-    export type List<PopulatedPath = never> = Single<PopulatedPath>[];
+    export type List<PopulatedPath extends RegistryTypeEntity.PopulableFields = never> = Single<PopulatedPath>[];
 
   }
 
