@@ -9,7 +9,7 @@ import { TeamEntity } from './Team';
 export namespace RegistryEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'team' | 'registry-type';
+  export type PopulableFields = 'parent' | 'team' | 'type';
 
   /**
    * The Reference interface will be used to
