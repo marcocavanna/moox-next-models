@@ -17,15 +17,13 @@ export type AnyObject = { [key: string]: any };
  * is a Plain object, without function field
  */
 export type JsonObject<T> = {
-  [K in keyof T]: T[K] extends (() => (void | any | Promise<any> | Promise<void> | mongoose.Document))
-    ? never
-    : T[K] extends (mongoose.Types.ObjectId | mongodb.ObjectId)
-      ? string
-      : T[K] extends mongoose.Types.DocumentArray<infer P>
-        ? JsonObject<P>[]
-        : T[K] extends (object | mongoose.Document)
-          ? JsonObject<Omit<T[K], keyof mongoose.Document>>
-          : T[K]
+  [K in keyof T]: T[K] extends mongoose.Types.DocumentArray<infer ATK>
+    ? JsonObject<ATK>[]
+    : T[K] extends (mongoose.MongooseDocument | {})
+      ? JsonObject<ATK>
+      : T[K] extends mongoose.Types.ObjectId
+        ? string
+        : T[K]
 };
 
 
