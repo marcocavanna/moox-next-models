@@ -29,9 +29,9 @@ export namespace Registry {
     vatNumber: DtoType.Nullable<string>,
 
     /** Email Value */
-    emails: DtoType.Array<{ isFavorite: boolean, value: DtoType.Nullable<string> }>,
+    emails: DtoType.Nullable<DtoType.Array<{ isFavorite: boolean, value: DtoType.Nullable<string> }>>,
 
     /** Phone Value */
-    phones: DtoType.Array<{ isFavorite: boolean, value: DtoType.Nullable<string> }>,
+    phones: DtoType.Nullable<DtoType.Array<{ isFavorite: boolean, value: DtoType.Nullable<string> }>>,
   }
 }
