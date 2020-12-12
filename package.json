@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "types": "./types",
-  "devDependencies": {
+  "dependencies": {
     "@types/mongoose": "~5.7.36",
     "@types/node": "^12.19.8"
   }
