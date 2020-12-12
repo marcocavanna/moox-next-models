@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import * as mongodb from 'mongodb';
+
 
 /* --------
  * Base Types & Interfaces
@@ -17,7 +19,7 @@ export type AnyObject = { [key: string]: any };
 export type JsonObject<T> = {
   [K in keyof T]: T[K] extends (() => (void | any | Promise<any> | Promise<void> | mongoose.Document))
     ? never
-    : T[K] extends mongoose.Types.ObjectId
+    : T[K] extends (mongoose.Types.ObjectId | mongodb.ObjectId)
       ? string
       : T[K] extends mongoose.Types.DocumentArray<infer P>
         ? JsonObject<P>[]

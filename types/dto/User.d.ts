@@ -1,27 +1,25 @@
-export namespace Dto {
-  export namespace User {
-    export interface Create {
-      email: string;
+export namespace User {
+  export interface Create {
+    email: string;
 
-      firstName: string;
+    firstName: string;
 
-      password: string;
+    password: string;
 
-      passwordConfirm: string;
+    passwordConfirm: string;
 
-      roleId?: string;
+    roleId?: string;
 
-      teamName?: string;
+    teamName?: string;
 
-      teamId?: string;
+    teamId?: string;
 
-      lastName?: string | null;
-    }
+    lastName?: string | null;
+  }
 
-    export interface Login {
-      email: string;
+  export interface Login {
+    email: string;
 
-      password: string;
-    }
+    password: string;
   }
 }
