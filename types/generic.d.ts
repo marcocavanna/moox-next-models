@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import * as mongodb from 'mongodb';
 
 
 /* --------
@@ -20,7 +19,7 @@ export type JsonObject<T> = {
   [K in keyof T]: T[K] extends mongoose.Types.DocumentArray<infer ATK>
     ? JsonObject<ATK>[]
     : T[K] extends (mongoose.MongooseDocument | {})
-      ? JsonObject<ATK>
+      ? JsonObject<T[K]>
       : T[K] extends mongoose.Types.ObjectId
         ? string
         : T[K]
