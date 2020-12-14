@@ -26,6 +26,10 @@ export namespace RegistryEntity {
     value: string;
   }
 
+  export type References = mongoose.Types.DocumentArray<Reference>;
+
+  export type ReferenceType = 'address' | 'email' | 'phone' | 'web';
+
   /**
    * The Address interface will be used to
    * define each single registry address
@@ -112,7 +116,7 @@ export namespace RegistryEntity {
     companyName?: string | null;
 
     /** Emails List */
-    emails: mongoose.Types.DocumentArray<Reference>;
+    emails: References;
 
     /** Non registry company firstName */
     firstName?: string | null;
@@ -127,7 +131,7 @@ export namespace RegistryEntity {
     parent?: PopulableField<Document, 'parent', PopulatedPath> | null
 
     /** Phones List */
-    phones: mongoose.Types.DocumentArray<Reference>;
+    phones: References;
 
     /** Related Team */
     team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>
@@ -142,7 +146,7 @@ export namespace RegistryEntity {
     vatNumber?: string | null;
 
     /** Webs and Social References */
-    webs: mongoose.Types.DocumentArray<Reference>;
+    webs: References;
   }
 
 

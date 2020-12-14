@@ -15,15 +15,25 @@ export type AnyObject = { [key: string]: any };
  * an API call. The result of this operation
  * is a Plain object, without function field
  */
+export type JsonArray<T> = T extends ArrayLike<infer U>
+  ? T extends mongoose.Types.DocumentArray<U>
+    ? JsonSubDocument<U>[]
+    : JsonObject<U>[]
+  : never;
+
 export type JsonObject<T> = {
-  [K in keyof T]: T[K] extends mongoose.Types.DocumentArray<infer ATK>
-    ? JsonObject<ATK>[]
-    : T[K] extends (mongoose.MongooseDocument | {})
-      ? JsonObject<T[K]>
-      : T[K] extends mongoose.Types.ObjectId
-        ? string
-        : T[K]
+  [K in keyof T]: T[K] extends (string | number | boolean)
+    ? T[K]
+    : T[K] extends ArrayLike<any>
+      ? JsonArray<T[K]>
+      : T[K] extends (mongoose.MongooseDocument | {})
+        ? JsonObject<T[K]>
+        : T[K] extends mongoose.Types.ObjectId
+          ? string
+          : T[K]
 };
+
+export type JsonSubDocument<T> = JsonObject<T & { _id: string, id: string }>;
 
 
 /**

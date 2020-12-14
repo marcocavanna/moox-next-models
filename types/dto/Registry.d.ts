@@ -5,7 +5,7 @@ import { RegistryEntity } from '../entity';
 
 export namespace Registry {
 
-  export interface Create {
+  export interface Manage {
     /** Registry Type */
     type: DtoType.Nullable<string>,
 
@@ -33,5 +33,13 @@ export namespace Registry {
 
     /** Phone Value */
     phones: DtoType.Nullable<DtoType.Array<{ isFavorite: boolean, value: DtoType.Nullable<string> }>>,
+  }
+
+  export interface ManageReference {
+    /** The Label */
+    label: DtoType.Nullable<string>;
+
+    /** The reference Value */
+    value: string;
   }
 }
