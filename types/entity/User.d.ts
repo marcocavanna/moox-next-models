@@ -95,14 +95,17 @@ export namespace UserEntity {
    * Describe all virtuals field
    */
   export interface Virtuals<PopulatedPath extends PopulableFields = void> {
-    /** User Complete Name */
-    completeName: string;
-
     /** The current user role in team */
     currentRole: PopulableVirtualField<RoleEntity.Document, 'teams.role', PopulatedPath>
 
     /** The user current team */
     currentTeam: PopulableVirtualField<TeamEntity.Document, 'teams.team', PopulatedPath>
+
+    /** User Complete Name */
+    displayName: string;
+
+    /** User SubName */
+    displaySubName: string | null;
 
     /** User Initials */
     initials: string;
