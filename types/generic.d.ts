@@ -30,7 +30,11 @@ export type JsonObject<T> = {
         ? JsonObject<T[K]>
         : T[K] extends mongoose.Types.ObjectId
           ? string
-          : T[K]
+          : T[K] extends (() => any)
+            ? never
+            : K extends keyof mongoose.MongooseDocument
+              ? never
+              : T[K]
 };
 
 export type JsonSubDocument<T> = JsonObject<T & { _id: string, id: string }>;

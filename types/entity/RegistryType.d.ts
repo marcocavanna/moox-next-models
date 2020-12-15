@@ -55,6 +55,12 @@ export namespace RegistryTypeEntity {
     /** Get or Set if Registry is a Customer */
     isCustomer: boolean;
 
+    /** An idle registry is not active */
+    isIdle: boolean;
+
+    /** A Prospect Registry could become a Customer */
+    isProspect: boolean;
+
     /** Get or Set if Registry is a Supplier */
     isSupplier: boolean;
 

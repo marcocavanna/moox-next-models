@@ -1,7 +1,8 @@
 import {
   UserEntity,
   RegistryEntity,
-  RegistryTypeEntity
+  RegistryTypeEntity,
+  TeamEntity
 } from './entity';
 
 
@@ -66,6 +67,30 @@ export namespace APIResponse {
     export type Single<PopulatedPath extends RegistryTypeEntity.PopulableFields = never> = RegistryTypeEntity.JSON<PopulatedPath>;
 
     export type List<PopulatedPath extends RegistryTypeEntity.PopulableFields = never> = Single<PopulatedPath>[];
+
+  }
+
+
+  /* --------
+   * Team Response
+   * -------- */
+  export namespace Team {
+
+    export type Single<PopulatedPath extends TeamEntity.PopulableFields = never> = TeamEntity.JSON<PopulatedPath>;
+
+    export type List<PopulatedPath extends TeamEntity.PopulableFields = never> = Single<PopulatedPath>[];
+
+  }
+
+
+  /* --------
+   * Users Response
+   * -------- */
+  export namespace User {
+
+    export type Single<PopulatedPath extends UserEntity.PopulableFields = never> = UserEntity.JSON<PopulatedPath>;
+
+    export type List<PopulatedPath extends UserEntity.PopulableFields = never> = Single<PopulatedPath>[];
 
   }
 
