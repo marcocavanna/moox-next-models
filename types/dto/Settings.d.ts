@@ -17,4 +17,23 @@ export namespace Settings {
     name: string;
   }
 
+
+  export interface Role {
+    name: string;
+
+    rank: number;
+
+    isOwner: boolean;
+
+    workingHours: {
+      monday: number;
+      thursday: number;
+      wednesday: number;
+      tuesday: number;
+      friday: number;
+      saturday: number;
+      sunday: number;
+    }
+  }
+
 }

@@ -60,7 +60,10 @@ export namespace RoleEntity {
     rank: number;
 
     /** Related team entity */
-    team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>
+    team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>;
+
+    /** Role Working Hour */
+    workingHours: mongoose.Types.Subdocument<WorkingHours>;
   }
 
 
@@ -76,6 +79,7 @@ export namespace RoleEntity {
    * Describe all virtuals field
    */
   export interface Virtuals {
+    totalWeekHours: number;
   }
 
 
@@ -86,4 +90,23 @@ export namespace RoleEntity {
   export interface Statics {
   }
 
+
+  /**
+   * Single Working Hour object per Roles
+   */
+  export interface WorkingHours {
+    monday: number;
+
+    thursday: number;
+
+    wednesday: number;
+
+    tuesday: number;
+
+    friday: number;
+
+    saturday: number;
+
+    sunday: number;
+  }
 }
