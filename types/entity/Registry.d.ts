@@ -26,7 +26,9 @@ export namespace RegistryEntity {
     value: string;
   }
 
-  export type References = mongoose.Types.DocumentArray<Reference>;
+  export type Addresses = mongoose.Types.DocumentArray<Address & mongoose.Types.Embedded>;
+
+  export type References = mongoose.Types.DocumentArray<Reference & mongoose.Types.Embedded>;
 
   export type ReferenceType = 'address' | 'email' | 'phone' | 'web';
 
@@ -107,7 +109,7 @@ export namespace RegistryEntity {
    */
   export interface Schema<PopulatedPath extends PopulableFields = never> {
     /** Address List */
-    addresses: mongoose.Types.DocumentArray<Address>;
+    addresses: Address;
 
     /** The company Claim */
     companyPayoff?: string | null;
