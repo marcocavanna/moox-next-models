@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableCollection, PopulableField } from '../generic';
+import { APIResponse, AugmentedSchema, PopulableCollection, PopulableField } from '../generic';
+
 import { TeamEntity } from './Team';
 import { UserEntity } from './User';
 
@@ -15,7 +16,8 @@ export namespace TaskEntity {
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model extends Statics, mongoose.Model<Document> {
+  export interface Model<PopulatedPath extends PopulableFields = void>
+    extends Statics, mongoose.Model<Document<PopulatedPath>> {
   }
 
 
@@ -24,11 +26,11 @@ export namespace TaskEntity {
    * this document will have virtuals and methods defined
    * into entity schema
    */
-  export interface Document<PopulatedPath extends PopulableFields = never>
-    extends Schema<PopulatedPath>, Methods, Virtuals<PopulatedPath>, mongoose.Document {
-    _id: mongoose.Types.ObjectId;
-
-    id: string;
+  export interface Document<PopulatedPath extends PopulableFields = void>
+    extends AugmentedSchema<Schema<PopulatedPath>>,
+      Methods,
+      AugmentedSchema<Virtuals<PopulatedPath>>,
+      mongoose.Document {
   }
 
 
@@ -36,12 +38,12 @@ export namespace TaskEntity {
    * The json interface type define the documents that will
    * be passed to client using API Endpoint response
    */
-  export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends JsonObject<Schema<PopulatedPath> & Virtuals> {
+  export type JSON<PopulatedPath extends PopulableFields = void> = APIResponse<AugmentedSchema<Schema<PopulatedPath>>
+    & AugmentedSchema<Virtuals<PopulatedPath>>>
+    & {
     _id: string;
-
     id: string;
-  }
+  };
 
 
   /**
@@ -49,7 +51,7 @@ export namespace TaskEntity {
    * that will be controlled by user and by API
    * this fields will be saved on database
    */
-  export interface Schema<PopulatedPath extends PopulableFields = never> {
+  export interface Schema<PopulatedPath extends PopulableFields = void> {
     /** Task additional watchers */
     additionalWatchers: PopulableCollection<UserEntity.Document, 'watchers', PopulatedPath>;
 
@@ -87,7 +89,7 @@ export namespace TaskEntity {
   /**
    * Describe all virtuals field
    */
-  export interface Virtuals<PopulatedPath extends PopulableFields = never> {
+  export interface Virtuals<PopulatedPath extends PopulableFields = void> {
     /** All tasks watchers */
     watchers: PopulableCollection<UserEntity.Document, 'watchers', PopulatedPath>;
   }

@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableCollection } from '../generic';
+import { APIResponse, AugmentedSchema, PopulableCollection } from '../generic';
+
 import { RoleEntity } from './Role';
 
 
@@ -15,7 +16,7 @@ export namespace TeamEntity {
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model<PopulatedPath extends PopulableFields = never>
+  export interface Model<PopulatedPath extends PopulableFields = void>
     extends Statics, mongoose.Model<Document<PopulatedPath>> {
   }
 
@@ -25,11 +26,11 @@ export namespace TeamEntity {
    * this document will have virtuals and methods defined
    * into entity schema
    */
-  export interface Document<PopulatedPath extends PopulableFields = never>
-    extends Schema<PopulatedPath>, Methods, Virtuals<PopulatedPath>, mongoose.Document {
-    _id: mongoose.Types.ObjectId;
-
-    id: string;
+  export interface Document<PopulatedPath extends PopulableFields = void>
+    extends AugmentedSchema<Schema<PopulatedPath>>,
+      Methods,
+      AugmentedSchema<Virtuals<PopulatedPath>>,
+      mongoose.Document {
   }
 
 
@@ -37,12 +38,12 @@ export namespace TeamEntity {
    * The json interface type define the documents that will
    * be passed to client using API Endpoint response
    */
-  export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends JsonObject<Schema<PopulatedPath> & Virtuals<PopulatedPath>> {
+  export type JSON<PopulatedPath extends PopulableFields = void> = APIResponse<AugmentedSchema<Schema<PopulatedPath>>
+    & AugmentedSchema<Virtuals<PopulatedPath>>>
+    & {
     _id: string;
-
     id: string;
-  }
+  };
 
 
   /**
@@ -50,7 +51,7 @@ export namespace TeamEntity {
    * that will be controlled by user and by API
    * this fields will be saved on database
    */
-  export interface Schema<PopulatedPath extends PopulableFields = never> {
+  export interface Schema<PopulatedPath extends PopulableFields = void> {
     /** The default role, used on User Creation */
     defaultRole: mongoose.Types.ObjectId;
 
@@ -81,7 +82,7 @@ export namespace TeamEntity {
   /**
    * Describe all virtuals field
    */
-  export interface Virtuals<PopulatedPath extends PopulableFields = never> {
+  export interface Virtuals<PopulatedPath extends PopulableFields = void> {
   }
 
 

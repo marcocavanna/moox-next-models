@@ -9,7 +9,7 @@
   "private": true,
   "types": "./types",
   "dependencies": {
-    "@types/mongoose": "~5.7.36",
+    "@types/mongoose": "~5.10.3",
     "@types/node": "^12.19.8"
   }
 }

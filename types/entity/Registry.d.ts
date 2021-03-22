@@ -1,15 +1,14 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableField, PopulableVirtualCollection } from '../generic';
+import { APIResponse, AugmentedSchema, PopulableField, PopulableVirtualCollection } from '../generic';
 
 import { RegistryTypeEntity } from './RegistryType';
-import { TeamEntity } from './Team';
 
 
 export namespace RegistryEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'children' | 'parent' | 'team' | 'type' | 'related';
+  export type PopulableFields = 'children' | 'parent' | 'type' | 'related';
 
   /**
    * The Reference interface will be used to
@@ -72,11 +71,8 @@ export namespace RegistryEntity {
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model<PopulatedPath extends PopulableFields = never>
+  export interface Model<PopulatedPath extends PopulableFields = void>
     extends Statics, mongoose.Model<Document<PopulatedPath>> {
-    _id: mongoose.Types.ObjectId;
-
-    id: string;
   }
 
 
@@ -85,8 +81,11 @@ export namespace RegistryEntity {
    * this document will have virtuals and methods defined
    * into entity schema
    */
-  export interface Document<PopulatedPath extends PopulableFields = never>
-    extends Schema<PopulatedPath>, Methods, Virtuals<PopulatedPath>, mongoose.Document {
+  export interface Document<PopulatedPath extends PopulableFields = void>
+    extends AugmentedSchema<Schema<PopulatedPath>>,
+      Methods,
+      AugmentedSchema<Virtuals<PopulatedPath>>,
+      mongoose.Document {
   }
 
 
@@ -94,12 +93,12 @@ export namespace RegistryEntity {
    * The json interface type define the documents that will
    * be passed to client using API Endpoint response
    */
-  export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends JsonObject<Schema<PopulatedPath> & Virtuals<PopulatedPath>> {
+  export type JSON<PopulatedPath extends PopulableFields = void> = APIResponse<AugmentedSchema<Schema<PopulatedPath>>
+    & AugmentedSchema<Virtuals<PopulatedPath>>>
+    & {
     _id: string;
-
     id: string;
-  }
+  };
 
 
   /**
@@ -107,9 +106,9 @@ export namespace RegistryEntity {
    * that will be controlled by user and by API
    * this fields will be saved on database
    */
-  export interface Schema<PopulatedPath extends PopulableFields = never> {
+  export interface Schema<PopulatedPath extends PopulableFields = void> {
     /** Address List */
-    addresses: Address;
+    addresses: Addresses;
 
     /** The company Claim */
     companyPayoff?: string | null;
@@ -136,7 +135,7 @@ export namespace RegistryEntity {
     phones: References;
 
     /** Related Team */
-    team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>
+    team: mongoose.Types.ObjectId;
 
     /** Registry Type */
     type: PopulableField<RegistryTypeEntity.Document, 'type', PopulatedPath> | null;
@@ -163,7 +162,7 @@ export namespace RegistryEntity {
   /**
    * Describe all virtuals field
    */
-  export interface Virtuals<PopulatedPath extends PopulableFields = never> {
+  export interface Virtuals<PopulatedPath extends PopulableFields = void> {
     /** Registry display name */
     displayName: string;
 

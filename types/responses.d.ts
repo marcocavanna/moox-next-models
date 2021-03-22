@@ -6,7 +6,7 @@ import {
 } from './entity';
 
 
-export namespace APIResponse {
+export namespace Response {
 
   /* --------
    * Auth Specific Responses

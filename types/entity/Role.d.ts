@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableField } from '../generic';
+import { APIResponse, AugmentedSchema, PopulableField } from '../generic';
 import { TeamEntity } from './Team';
 
 
@@ -14,7 +14,7 @@ export namespace RoleEntity {
    * keep in mind that the created entity will not be
    * saved on Database unless the .save() function will be called
    */
-  export interface Model<PopulatedPath extends PopulableFields = never>
+  export interface Model<PopulatedPath extends PopulableFields = void>
     extends Statics, mongoose.Model<Document<PopulatedPath>> {
   }
 
@@ -24,11 +24,11 @@ export namespace RoleEntity {
    * this document will have virtuals and methods defined
    * into entity schema
    */
-  export interface Document<PopulatedPath extends PopulableFields = never>
-    extends Schema<PopulatedPath>, Methods, Virtuals, mongoose.Document {
-    _id: mongoose.Types.ObjectId;
-
-    id: string;
+  export interface Document<PopulatedPath extends PopulableFields = void>
+    extends AugmentedSchema<Schema<PopulatedPath>>,
+      Methods,
+      AugmentedSchema<Virtuals<PopulatedPath>>,
+      mongoose.Document {
   }
 
 
@@ -36,12 +36,12 @@ export namespace RoleEntity {
    * The json interface type define the documents that will
    * be passed to client using API Endpoint response
    */
-  export interface JSON<PopulatedPath extends PopulableFields = never>
-    extends JsonObject<Schema<PopulatedPath> & Virtuals> {
+  export type JSON<PopulatedPath extends PopulableFields = void> = APIResponse<AugmentedSchema<Schema<PopulatedPath>>
+    & AugmentedSchema<Virtuals<PopulatedPath>>>
+    & {
     _id: string;
-
     id: string;
-  }
+  };
 
 
   /**
@@ -49,7 +49,7 @@ export namespace RoleEntity {
    * that will be controlled by user and by API
    * this fields will be saved on database
    */
-  export interface Schema<PopulatedPath extends PopulableFields = never> {
+  export interface Schema<PopulatedPath extends PopulableFields = void> {
     /** Check or set if this role is Team Owner Role */
     isOwner: boolean;
 

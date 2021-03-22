@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { JsonObject, PopulableField, PopulableVirtualField } from '../generic';
+import { PopulableField, PopulableVirtualField, Nullable, AugmentedSchema, APIResponse } from '../generic';
+
 import { RoleEntity } from './Role';
 import { TeamEntity } from './Team';
 
@@ -26,10 +27,10 @@ export namespace UserEntity {
    * into entity schema
    */
   export interface Document<PopulatedPath extends PopulableFields = void>
-    extends Schema<PopulatedPath>, Methods, Virtuals<PopulatedPath>, mongoose.Document {
-    _id: mongoose.Types.ObjectId;
-
-    id: string;
+    extends AugmentedSchema<Schema<PopulatedPath>>,
+      Methods,
+      AugmentedSchema<Virtuals<PopulatedPath>>,
+      mongoose.Document {
   }
 
 
@@ -37,12 +38,12 @@ export namespace UserEntity {
    * The json interface type define the documents that will
    * be passed to client using API Endpoint response
    */
-  export interface JSON<PopulatedPath extends PopulableFields = void>
-    extends JsonObject<Schema<PopulatedPath> & Virtuals<PopulatedPath>> {
+  export type JSON<PopulatedPath extends PopulableFields = void> = APIResponse<AugmentedSchema<Schema<PopulatedPath>>
+    & AugmentedSchema<Virtuals<PopulatedPath>>>
+    & {
     _id: string;
-
     id: string;
-  }
+  };
 
 
   /**
@@ -51,6 +52,9 @@ export namespace UserEntity {
    * this fields will be saved on database
    */
   export interface Schema<PopulatedPath extends PopulableFields = void> {
+    /** Timestamp of Connection time */
+    connectedOn?: Nullable<number>;
+
     /** The user current team */
     currentTeamId: mongoose.Types.ObjectId;
 
@@ -66,8 +70,17 @@ export namespace UserEntity {
     /** The identity Id */
     identityId: string;
 
+    /** Is user Online */
+    isOnline?: boolean;
+
+    /** Check if user is system administrator */
+    isSystemAdministrator?: boolean;
+
     /** The User Surname */
     lastName?: string;
+
+    /** The last online timestamp value */
+    lastOnline?: Nullable<number>;
 
     /** Photo URL Location */
     photoURL?: string;
