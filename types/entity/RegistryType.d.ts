@@ -8,7 +8,7 @@ import { TeamEntity } from './Team';
 export namespace RegistryTypeEntity {
 
   /** Set of populable model path */
-  export type PopulableFields = 'team';
+  export type PopulableFields = void | 'team';
 
   /**
    * The Model is used to create a new Entity

@@ -8,7 +8,7 @@ import { RegistryTypeEntity } from './RegistryType';
 export namespace RegistryEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'children' | 'parent' | 'type' | 'related';
+  export type PopulableFields = void | 'children' | 'parent' | 'type' | 'related';
 
   /**
    * The Reference interface will be used to
@@ -24,10 +24,6 @@ export namespace RegistryEntity {
     /** The reference value */
     value: string;
   }
-
-  export type Addresses = mongoose.Types.DocumentArray<Address & mongoose.Types.Embedded>;
-
-  export type References = mongoose.Types.DocumentArray<Reference & mongoose.Types.Embedded>;
 
   export type ReferenceType = 'address' | 'email' | 'phone' | 'web';
 
@@ -108,7 +104,7 @@ export namespace RegistryEntity {
    */
   export interface Schema<PopulatedPath extends PopulableFields = void> {
     /** Address List */
-    addresses: Addresses;
+    addresses: Address[];
 
     /** The company Claim */
     companyPayoff?: string | null;
@@ -117,7 +113,7 @@ export namespace RegistryEntity {
     companyName?: string | null;
 
     /** Emails List */
-    emails: References;
+    emails: Reference[];
 
     /** Non registry company firstName */
     firstName?: string | null;
@@ -132,7 +128,7 @@ export namespace RegistryEntity {
     parent?: PopulableField<Document, 'parent', PopulatedPath> | null
 
     /** Phones List */
-    phones: References;
+    phones: Reference[];
 
     /** Related Team */
     team: mongoose.Types.ObjectId;
@@ -147,7 +143,7 @@ export namespace RegistryEntity {
     vatNumber?: string | null;
 
     /** Webs and Social References */
-    webs: References;
+    webs: Reference[];
   }
 
 

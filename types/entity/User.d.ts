@@ -9,7 +9,7 @@ import { TeamEntity } from './Team';
 export namespace UserEntity {
 
   /** The set of the populable path */
-  export type PopulableFields = 'teams.role' | 'teams.team';
+  export type PopulableFields = void | 'teams.role' | 'teams.team';
 
   /**
    * The Model is used to create a new Entity

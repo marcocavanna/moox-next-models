@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { APIResponse, AugmentedSchema, PopulableCollection, PopulableField } from '../generic';
+import { ProjectEntity } from './Project';
 
 import { TeamEntity } from './Team';
 import { UserEntity } from './User';
@@ -9,7 +10,7 @@ import { UserEntity } from './User';
 export namespace TaskEntity {
 
   /** Set of populable model path */
-  export type PopulableFields = 'assignees' | 'team' | 'watchers';
+  export type PopulableFields = void | 'assignees' | 'project' | 'team' | 'watchers';
 
   /**
    * The Model is used to create a new Entity
@@ -67,8 +68,11 @@ export namespace TaskEntity {
     /** Task is marked as Urgent */
     isUrgent: boolean;
 
+    /** Related Project */
+    project: PopulableField<ProjectEntity.Document, 'project', PopulatedPath>;
+
     /** Task subtask */
-    subtasks: Subtasks;
+    subtasks: Subtask[];
 
     /** Related Team */
     team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>;
@@ -122,11 +126,7 @@ export namespace TaskEntity {
   }
 
 
-  /**
-   * SubTask is a small checklist item
-   */
-  export type Subtasks = mongoose.Types.DocumentArray<mongoose.Types.Embedded & Subtask>;
-
+  /** SubTask is a small checklist item */
   export interface Subtask {
     /** Subtask creation timestamp */
     createdOn: number;

@@ -100,8 +100,10 @@ export type PopulableVirtualCollection<Document extends mongoose.Document,
 
 
 export type APINamespace =
+  | 'projects'
   | 'registries'
   | 'registry-types'
   | 'roles'
   | 'teams'
+  | 'types'
   | 'users';

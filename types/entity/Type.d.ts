@@ -1,15 +1,16 @@
 import * as mongoose from 'mongoose';
 
-import { APIResponse, AugmentedSchema, PopulableCollection } from '../generic';
+import { APIResponse, AugmentedSchema, PopulableField } from '../generic';
 
-import { RoleEntity } from './Role';
+import type { ProjectEntity } from './Project';
 
 
-export namespace TeamEntity {
+export namespace TypeEntity {
 
   /** Set of populable model path */
-  export type PopulableFields = void | 'roles';
+  export type PopulableFields = void | 'project';
 
+  export type MasterType = 'TASK_STATUS' | 'TASK_TYPE';
 
   /**
    * The Model is used to create a new Entity
@@ -52,17 +53,20 @@ export namespace TeamEntity {
    * this fields will be saved on database
    */
   export interface Schema<PopulatedPath extends PopulableFields = void> {
-    /** The default role, used on User Creation */
-    defaultRole: mongoose.Types.ObjectId;
+    /** Type Description */
+    description?: string;
 
-    /** The Team Name */
+    /** Set the master type */
+    master: MasterType;
+
+    /** Type Name */
     name: string;
 
-    /** All roles related to Teams */
-    roles: PopulableCollection<RoleEntity.Document, 'roles', PopulatedPath>
+    /** Related Project, if Exists */
+    project?: PopulableField<ProjectEntity.Document, 'project', PopulatedPath> | null;
 
-    /** The team slug */
-    slug?: string;
+    /** Related Team */
+    team: mongoose.Types.ObjectId;
   }
 
 
@@ -71,11 +75,6 @@ export namespace TeamEntity {
    * and that could use once they are mapped into document
    */
   export interface Methods {
-    /**
-     * Get a safe, unique and usable slug for a team
-     * if team slug is already defined, return itself
-     */
-    getSlug(): Promise<string>;
   }
 
 

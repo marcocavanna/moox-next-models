@@ -2,7 +2,7 @@ import {
   UserEntity,
   RegistryEntity,
   RegistryTypeEntity,
-  TeamEntity, RoleEntity
+  TeamEntity, RoleEntity, ProjectEntity
 } from './entity';
 
 
@@ -43,6 +43,18 @@ export namespace Response {
 
     /** User Data */
     export type User = UserEntity.JSON<'teams.role' | 'teams.team'>;
+  }
+
+
+  /* --------
+   * Projects Responses
+   * -------- */
+  export namespace Projects {
+
+    export type Single<PopulatedPath extends ProjectEntity.PopulableFields = void> = ProjectEntity.JSON<PopulatedPath>;
+
+    export type List<PopulatedPath extends ProjectEntity.PopulableFields = void> = Single<PopulatedPath>[];
+
   }
 
 

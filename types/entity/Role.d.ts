@@ -7,7 +7,7 @@ import { TeamEntity } from './Team';
 export namespace RoleEntity {
 
   /** Set of populable model path */
-  export type PopulableFields = 'team';
+  export type PopulableFields = void | 'team';
 
   /**
    * The Model is used to create a new Entity
@@ -63,7 +63,7 @@ export namespace RoleEntity {
     team: PopulableField<TeamEntity.Document, 'team', PopulatedPath>;
 
     /** Role Working Hour */
-    workingHours: mongoose.Types.Subdocument<WorkingHours>;
+    workingHours: mongoose.Types.Subdocument & WorkingHours;
   }
 
 
@@ -78,7 +78,7 @@ export namespace RoleEntity {
   /**
    * Describe all virtuals field
    */
-  export interface Virtuals {
+  export interface Virtuals<PopulatedPath extends PopulableFields = void> {
     totalWeekHours: number;
   }
 
